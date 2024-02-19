@@ -5,10 +5,10 @@ export const register = async (req: express.Request, res: express.Response) => {
     try {
         const user = new UserModel(req.body);
         await user.save();
-        const token = await user.generateAuthToken();
+        // const token = await user.generateAuthToken();
         console.log(user.password);
 
-        res.status(201).json({ user, token });
+        // res.status(201).json({ user, token });
     } catch (error: any) {
         res.status(500).json({ message: error.message });
     }
