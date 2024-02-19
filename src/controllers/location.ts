@@ -1,22 +1,14 @@
 import { Request, Response } from 'express';
-import { BikeModel } from '../models/bikes';
+import { LocationModel } from '../models/locations';
 
 export const createOne = async (req: Request, res: Response) => {
     try {
-        const location_id = req.params.location_id;
-        const { name, year, color, license_plate, status, type, QR_code } = req.body;
-        const bike = new BikeModel({
-            name,
-            year,
-            color,
-            license_plate,
-            status,
-            type,
-            QR_code,
-            location_id
+        const { address } = req.body;
+        const location = new LocationModel({
+            address
         });
-        console.log(bike);
-        res.status(200).json(bike);
+        console.log(location);
+        return res.status(200).json(location);
     } catch (error) {
         return res.status(400).json({ message: error });
     }
@@ -24,10 +16,10 @@ export const createOne = async (req: Request, res: Response) => {
 }
 
 export const getOne = async (req: Request, res: Response) => {
-    const bike_id = req.params.id;
+    const location_id = req.params.id;
     try {
-        const bike = await BikeModel.findById(bike_id);
-        return res.status(200).json(bike);
+        const location = await LocationModel.findById(location_id);
+        return res.status(200).json(location);
     } catch (error) {
         return res.status(400).json({ message: error });
     }
@@ -35,33 +27,33 @@ export const getOne = async (req: Request, res: Response) => {
 
 export const getAll = async (req: Request, res: Response) => {
     try {
-        const bikes = await BikeModel.find();
-        return res.status(200).json(bikes).end();
+        const locations = await LocationModel.find();
+        return res.status(200).json(locations).end();
     } catch (error) {
         return res.status(400).json({ message: error }).end();
     }
 }
 
 export const updateOne = async (req: Request, res: Response) => {
-    const bike_id = req.params.id;
+    const location_id = req.params.id;
     const update_property_name = Object.keys(req.body);
-    const allowed_updates = ['name', 'year', 'brand', 'year', 'license_plate', 'status', 'QR_code'];
+    const allowed_updates = ['address'];
     const is_valid_update = update_property_name.every((update) => allowed_updates.includes(update));
     if (!is_valid_update) {
         res.status(400).json({ message: 'Invalid update property' }).end();
     }
     try {
-        const bike = await BikeModel.findByIdAndUpdate(bike_id, req.body);
-        return res.status(200).json(bike);
+        const location = await LocationModel.findByIdAndUpdate(location_id, req.body);
+        return res.status(200).json(location);
     } catch (error) {
         return res.status(400).json({ message: error });
     }
 }
 
-export const deleteOne = async (req: Request, res: Response) => {
-    const bike_id = req.params.id;
+export const removeOne = async (req: Request, res: Response) => {
+    const location_id = req.params.id;
     try {
-        const bike = await BikeModel.findByIdAndDelete(bike_id);
+        const bike = await LocationModel.findByIdAndDelete(location_id);
         return res.status(200).json(bike).end();
     } catch (error) {
         return res.status(400).json({ message: error }).end();

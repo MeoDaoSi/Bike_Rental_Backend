@@ -1,8 +1,9 @@
 import express from 'express';
-import register from './user';
+import auth from './auth';
+import location from './location';
 const router = express.Router();
 
-export default (): express.Router => {
-    register(router);
-    return router;
-};
+router.use('/auth', auth);
+router.use('/location', location);
+
+export default router;

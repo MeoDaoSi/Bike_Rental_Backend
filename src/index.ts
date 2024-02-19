@@ -25,7 +25,7 @@ db_connect();
 
 const server = http.createServer(app);
 
-app.use(router());
+app.use(router);
 
 server.listen(8080, () => {
     console.log('Listening on port 8080');
