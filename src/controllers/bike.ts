@@ -1,27 +1,24 @@
 import { Request, Response } from 'express';
-import { BikeModel } from '../models/bikes';
+import { BikeModel } from '../models/Bike';
+import asyncHandler from '../helpers/asyncHandler'
 
-export const createOne = async (req: Request, res: Response) => {
-    try {
-        const location_id = req.params.location_id;
-        const { name, year, color, license_plate, status, type, QR_code } = req.body;
-        const bike = new BikeModel({
-            name,
-            year,
-            color,
-            license_plate,
-            status,
-            type,
-            QR_code,
-            location_id
-        });
-        console.log(bike);
-        res.status(200).json(bike);
-    } catch (error) {
-        return res.status(400).json({ message: error });
-    }
-
-}
+export const createOne = asyncHandler(async (req: Request, res: Response) => {
+    const location_id = req.params.location_id;
+    const { brand, model, year, color, license_plate, status, type, QR_code } = req.body;
+    const bike = new BikeModel({
+        brand,
+        model,
+        year,
+        color,
+        license_plate,
+        status,
+        type,
+        QR_code,
+        location_id
+    });
+    console.log(bike);
+    return res.status(200).json(bike);
+})
 
 export const getOne = async (req: Request, res: Response) => {
     const bike_id = req.params.id;

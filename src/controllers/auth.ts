@@ -1,5 +1,5 @@
 import express from 'express';
-import { UserModel } from '../models/users';
+import { UserModel } from '../models/User';
 
 export const register = async (req: express.Request, res: express.Response) => {
     try {

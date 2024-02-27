@@ -1,19 +1,16 @@
 import { Request, Response } from 'express';
-import { LocationModel } from '../models/locations';
+import { LocationModel } from '../models/Location';
+import asyncHandler from '../helpers/asyncHandler'
 
-export const createOne = async (req: Request, res: Response) => {
-    try {
-        const { address } = req.body;
-        const location = new LocationModel({
-            address
-        });
-        console.log(location);
-        return res.status(200).json(location);
-    } catch (error) {
-        return res.status(400).json({ message: error });
-    }
-
-}
+export const createOne = asyncHandler(async (req: Request, res: Response) => {
+    const { address } = req.body;
+    const location = new LocationModel({
+        address
+    });
+    location.save();
+    console.log(location);
+    res.status(200).json(location);
+})
 
 export const getOne = async (req: Request, res: Response) => {
     const location_id = req.params.id;
