@@ -3,9 +3,9 @@ import { getOne, createOne, updateOne, removeOne, getAll } from '../controllers/
 const router = express.Router()
 
 router.get('/', getAll)
-router.get('/id', getOne)
+router.get('/:id', getOne)
 router.post('/', createOne)
-router.patch('/id', updateOne)
-router.delete('/id', removeOne)
+router.patch('/:id', updateOne)
+router.delete('/:id', removeOne)
 
 export default router

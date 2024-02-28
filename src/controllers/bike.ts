@@ -1,10 +1,9 @@
 import { Request, Response } from 'express';
 import { BikeModel } from '../models/Bike';
-import asyncHandler from '../helpers/asyncHandler'
+import asyncHandler from '../helpers/asyncHandler';
 
-export const createOne = asyncHandler(async (req: Request, res: Response) => {
-    const location_id = req.params.location_id;
-    const { brand, model, year, color, license_plate, status, type, QR_code } = req.body;
+export const create = asyncHandler(async (req: Request, res: Response) => {
+    const { brand, model, year, color, license_plate, status, type, location_id } = req.body;
     const bike = new BikeModel({
         brand,
         model,
@@ -13,54 +12,33 @@ export const createOne = asyncHandler(async (req: Request, res: Response) => {
         license_plate,
         status,
         type,
-        QR_code,
         location_id
     });
+    await bike.save();
     console.log(bike);
     return res.status(200).json(bike);
 })
 
-export const getOne = async (req: Request, res: Response) => {
+export const getOne = asyncHandler(async (req: Request, res: Response) => {
     const bike_id = req.params.id;
-    try {
-        const bike = await BikeModel.findById(bike_id);
-        return res.status(200).json(bike);
-    } catch (error) {
-        return res.status(400).json({ message: error });
-    }
-}
+    const bike = await BikeModel.findById(bike_id);
+    return res.status(200).json(bike);
+})
 
-export const getAll = async (req: Request, res: Response) => {
-    try {
-        const bikes = await BikeModel.find();
-        return res.status(200).json(bikes).end();
-    } catch (error) {
-        return res.status(400).json({ message: error }).end();
-    }
-}
+export const getAll = asyncHandler(async (req: Request, res: Response) => {
+    const bikes = await BikeModel.find();
+    return res.status(200).json(bikes);
+})
 
-export const updateOne = async (req: Request, res: Response) => {
+export const update = asyncHandler(async (req: Request, res: Response) => {
+    const bike = await BikeModel.findById(req.params.id);
+    if (!bike) throw new Error('Bike not found');
+    const data = BikeModel.updateOne({ _id: bike._id }, { $set: { ...bike } })
+    return res.status(200).json(data);
+})
+
+export const remove = asyncHandler(async (req: Request, res: Response) => {
     const bike_id = req.params.id;
-    const update_property_name = Object.keys(req.body);
-    const allowed_updates = ['name', 'year', 'brand', 'year', 'license_plate', 'status', 'QR_code'];
-    const is_valid_update = update_property_name.every((update) => allowed_updates.includes(update));
-    if (!is_valid_update) {
-        res.status(400).json({ message: 'Invalid update property' }).end();
-    }
-    try {
-        const bike = await BikeModel.findByIdAndUpdate(bike_id, req.body);
-        return res.status(200).json(bike);
-    } catch (error) {
-        return res.status(400).json({ message: error });
-    }
-}
-
-export const deleteOne = async (req: Request, res: Response) => {
-    const bike_id = req.params.id;
-    try {
-        const bike = await BikeModel.findByIdAndDelete(bike_id);
-        return res.status(200).json(bike).end();
-    } catch (error) {
-        return res.status(400).json({ message: error }).end();
-    }
-}
+    const bike = await BikeModel.findByIdAndDelete(bike_id);
+    return res.status(200).json(bike);
+})
