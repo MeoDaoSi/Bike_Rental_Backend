@@ -45,13 +45,11 @@ const UserSchema = new Schema<User>({
     },
     email: {
         type: Schema.Types.String,
-        required: true,
         unique: true,
         trim: true,
     },
     password: {
         type: Schema.Types.String,
-        required: true,
         select: false,
     },
     age: {

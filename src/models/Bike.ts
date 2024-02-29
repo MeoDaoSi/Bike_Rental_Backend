@@ -19,6 +19,7 @@ export default interface Bike {
     brand: string,
     model: string,
     year: number,
+    color: string,
     license_plate: string,
     status: string,
     type: string,
@@ -40,6 +41,10 @@ const BikeSchema = new Schema<Bike>({
     },
     year: {
         type: Schema.Types.Number,
+        required: true,
+    },
+    color: {
+        type: Schema.Types.String,
         required: true,
     },
     license_plate: {

@@ -18,7 +18,7 @@ router.post(
     create
 )
 
-router.patch(
+router.put(
     '/:id',
     update
 )
