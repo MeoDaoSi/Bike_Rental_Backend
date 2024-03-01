@@ -65,6 +65,7 @@ const BikeSchema = new Schema<Bike>({
     }
 }, {
     versionKey: false,
+    timestamps: true,
 })
 
 export const BikeModel = model<Bike>(DOCUMENT_NAME, BikeSchema, COLLECTION_NAME);
