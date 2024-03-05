@@ -1,4 +1,5 @@
 import { Schema, Types, model } from 'mongoose';
+import Bike from './Bike';
 
 export const DOCUMENT_NAME = 'Contact';
 export const COLLECTION_NAME = 'contacts';
@@ -19,8 +20,8 @@ interface Contact {
     status: string,
     total_price: number,
     duration: number,
-    bike_id: Types.ObjectId,
-    user_id: Types.ObjectId,
+    bikes: Bike[],
+    user: Types.ObjectId,
 }
 
 const ContactSchema = new Schema<Contact>({
@@ -58,12 +59,16 @@ const ContactSchema = new Schema<Contact>({
         type: Number,
         required: true,
     },
-    bike_id: {
-        type: Schema.Types.ObjectId,
-        ref: 'Bike',
+    bikes: {
+        type: [
+            {
+                type: Schema.Types.ObjectId,
+                ref: 'Bike',
+            }
+        ],
         required: true,
     },
-    user_id: {
+    user: {
         type: Schema.Types.ObjectId,
         ref: 'User',
         required: true,

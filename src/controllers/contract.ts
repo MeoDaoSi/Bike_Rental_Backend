@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { ContactModel } from '../models/Contact';
+import { ContactModel } from '../models/Contract';
 import asyncHandler from '../helpers/asyncHandler';
 
 export const create = asyncHandler(async (req: Request, res: Response) => {
@@ -12,8 +12,8 @@ export const create = asyncHandler(async (req: Request, res: Response) => {
         status: req.body.status,
         total_price: req.body.total_price,
         duration: req.body.duration,
-        bike_id: req.body.bike_id,
-        user_id: req.body.user_id,
+        bike: req.body.bike_id,
+        user: req.body.user_id,
     });
     await contact.save();
     return res.status(200).json(contact);
@@ -41,8 +41,8 @@ export const update = asyncHandler( async (req: Request, res: Response) => {
     if (req.body.status) contact.status = req.body.status;
     if (req.body.total_price) contact.total_price = req.body.total_price;
     if (req.body.duration) contact.duration = req.body.duration;
-    if (req.body.bike_id) contact.bike_id = req.body.bike_id;
-    if (req.body.user_id) contact.user_id = req.body.user_id;
+    if (req.body.bike_id) contact.bikes = req.body.bike_id;
+    if (req.body.user_id) contact.user = req.body.user_id;
     
     await ContactModel.updateOne({ $set: contact })
         .lean()
