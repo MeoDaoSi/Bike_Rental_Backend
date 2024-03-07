@@ -9,7 +9,7 @@ router.use('/:location_id/bike', bike);
 router.get('/', getAll)
 router.get('/:location_id', getOne)
 router.post('/', createOne)
-router.patch('/:location_id', updateOne)
+router.put('/:location_id', updateOne)
 router.delete('/:location_id', removeOne)
 
 export default router

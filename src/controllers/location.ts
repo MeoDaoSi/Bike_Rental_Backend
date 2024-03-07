@@ -12,7 +12,10 @@ export const createOne = asyncHandler(async (req: Request, res: Response) => {
 })
 
 export const getOne = async (req: Request, res: Response) => {
-    const location_id = req.params.id;
+    const location_id = req.params.location_id;
+    const query = req.query
+    console.log(query);
+    
     try {
         const location = await LocationModel.findById(location_id);
         return res.status(200).json(location);
@@ -27,7 +30,8 @@ export const getAll = asyncHandler(async (req: Request, res: Response) => {
 })
 
 export const updateOne = async (req: Request, res: Response) => {
-    const location = await LocationModel.findById(req.params.id);
+    
+    const location = await LocationModel.findById(req.params.location_id);
     if (!location) {
         return res.status(404).json({ message: 'Location not found' });
     }
