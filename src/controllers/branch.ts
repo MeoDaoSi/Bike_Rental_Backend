@@ -1,9 +1,9 @@
 import { Request, Response } from 'express';
-import { LocationModel } from '../models/Location';
+import { BranchModel } from '../models/Branch';
 import asyncHandler from '../helpers/asyncHandler'
 
 export const createOne = asyncHandler(async (req: Request, res: Response) => {
-    const location = new LocationModel({
+    const location = new BranchModel({
         address: req.body.address,
     });
     await location.save();
@@ -12,39 +12,37 @@ export const createOne = asyncHandler(async (req: Request, res: Response) => {
 })
 
 export const getOne = async (req: Request, res: Response) => {
-    const location_id = req.params.location_id;
-    const query = req.query
-    console.log(query);
-    
+    const branch_id = req.params.branch_id;
+
     try {
-        const location = await LocationModel.findById(location_id);
-        return res.status(200).json(location);
+        const branch = await BranchModel.findById(branch_id);
+        return res.status(200).json(branch);
     } catch (error) {
         return res.status(400).json({ message: error });
     }
 }
 
 export const getAll = asyncHandler(async (req: Request, res: Response) => {
-    const locations = await LocationModel.find();
+    const locations = await BranchModel.find();
     return res.status(200).json(locations).end();
 })
 
 export const updateOne = async (req: Request, res: Response) => {
-    
-    const location = await LocationModel.findById(req.params.location_id);
+
+    const location = await BranchModel.findById(req.params.location_id);
     if (!location) {
         return res.status(404).json({ message: 'Location not found' });
     }
     location.address = req.body.address;
-    
-    await LocationModel.updateOne({ _id: location._id }, { $set: { ...location } });
+
+    await BranchModel.updateOne({ _id: location._id }, { $set: { ...location } });
     return res.status(200).json();
 }
 
 export const removeOne = async (req: Request, res: Response) => {
     const location_id = req.params.id;
     try {
-        const bike = await LocationModel.findByIdAndDelete(location_id);
+        const bike = await BranchModel.findByIdAndDelete(location_id);
         return res.status(200).json(bike).end();
     } catch (error) {
         return res.status(400).json({ message: error }).end();

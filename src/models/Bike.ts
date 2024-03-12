@@ -15,19 +15,19 @@ export enum BikeType {
 
 export default interface Bike {
     _id: Types.ObjectId,
-    location_id: Types.ObjectId,
+    branch: Types.ObjectId,
     brand: string,
     model: string,
     year: number,
     color: string,
-    license_plate: string,
+    license_plate?: string,
     status: string,
     type: string,
     QR_code: string,
 }
 
 const BikeSchema = new Schema<Bike>({
-    location_id: {
+    branch: {
         type: Schema.Types.ObjectId,
         required: true,
     },

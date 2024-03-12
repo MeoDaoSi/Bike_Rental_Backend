@@ -3,16 +3,15 @@ import { BikeModel } from '../models/Bike';
 import asyncHandler from '../helpers/asyncHandler';
 
 export const create = asyncHandler(async (req: Request, res: Response) => {
-    const { brand, model, year, color, license_plate, status, type, location_id } = req.body;
     const bike = new BikeModel({
-        brand,
-        model,
-        year,
-        color,
-        license_plate,
-        status,
-        type,
-        location_id
+        brand: req.body.brand,
+        model: req.body.model,
+        year: req.body.year,
+        color: req.body.color,
+        license_plate: req.body.license_plate,
+        status: req.body.status,
+        type: req.body.type,
+        branch: req.body.branch,
     });
     await bike.save();
     console.log(bike);
@@ -41,7 +40,7 @@ export const update = asyncHandler(async (req: Request, res: Response) => {
     if (req.body.license_plate) bike.license_plate = req.body.license_plate;
     if (req.body.status) bike.status = req.body.status;
     if (req.body.type) bike.type = req.body.type;
-    if (req.body.location_id) bike.location_id = req.body.location_id;
+    if (req.body.branch) bike.branch = req.body.branch;
 
     await BikeModel.updateOne({ _id: bike._id }, { $set: { ...bike } })
         .lean()
