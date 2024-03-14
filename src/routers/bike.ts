@@ -4,7 +4,7 @@ import { getAll, create, getOne, update, remove } from '../controllers/bike';
 const router = express.Router();
 
 router.get(
-    '/',
+    '/:branch_id',
     getAll
 )
 

@@ -3,11 +3,6 @@ import { Schema, Types, model } from 'mongoose';
 export const DOCUMENT_NAME = 'Bike';
 export const COLLECTION_NAME = 'bikes';
 
-export enum BikeStatus {
-    AVAILABLE = 'AVAILABLE',
-    UNAVAILABLE = 'UNAVAILABLEs',
-}
-
 export enum BikeType {
     BICYCLE = 'BICYCLE',
     MOTORCYCLE = 'MOTORCYCLE',
@@ -21,7 +16,7 @@ export default interface Bike {
     year: number,
     color: string,
     license_plate?: string,
-    status: string,
+    status: boolean,
     type: string,
     QR_code: string,
 }
@@ -51,9 +46,8 @@ const BikeSchema = new Schema<Bike>({
         type: Schema.Types.String,
     },
     status: {
-        type: Schema.Types.String,
-        enum: Object.values(BikeStatus),
-        default: 'AVAILABLE',
+        type: Schema.Types.Boolean,
+        default: true,
         required: true,
     },
     type: {

@@ -25,7 +25,26 @@ export const getOne = asyncHandler(async (req: Request, res: Response) => {
 })
 
 export const getAll = asyncHandler(async (req: Request, res: Response) => {
-    const bikes = await BikeModel.find();
+    console.log(req.query);
+    console.log(req.params);
+    let match: { status?: boolean } = {};
+    if (req.query.status) {
+        match.status = req.query.status === 'AVAILABLE' ? true : false;
+    }
+    console.log(match);
+
+
+    const bikes = await BikeModel.find({ branch: req.params.branch_id })
+        .populate({
+            path: 'branch',
+            select: 'address',
+
+        })
+        .sort({ createdAt: -1 })
+        .lean()
+        .exec();
+    console.log(bikes);
+
     return res.status(200).json(bikes);
 })
 
