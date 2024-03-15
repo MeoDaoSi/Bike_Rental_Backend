@@ -1,5 +1,7 @@
 import { Schema, Types, model } from 'mongoose';
 import Bike from './Bike';
+import User from './User';
+import { BikeType } from './Bike';
 
 export const DOCUMENT_NAME = 'Contact';
 export const COLLECTION_NAME = 'contacts';
@@ -8,9 +10,10 @@ export enum ContactStatus {
     PENDING = 'PENDING',
     ACCEPTED = 'ACCEPTED',
     REJECTED = 'REJECTED',
+    COMPLETED = 'COMPLETED',
 }
 
-interface Contact { 
+export default interface Contract { 
     _id: Types.ObjectId,
     start_date: Date,
     end_date: Date,
@@ -20,11 +23,12 @@ interface Contact {
     status: string,
     total_price: number,
     duration: number,
+    type: string
     bikes: Bike[],
-    user: Types.ObjectId,
+    user: User,
 }
 
-const ContactSchema = new Schema<Contact>({
+const ContactSchema = new Schema<Contract>({
     start_date: {
         type: Date,
         required: true,
@@ -59,6 +63,12 @@ const ContactSchema = new Schema<Contact>({
         type: Number,
         required: true,
     },
+    type: {
+        type: String,
+        required: true,
+        enum: Object.values(BikeType),
+    },
+    // select_package
     bikes: {
         type: [
             {
@@ -73,13 +83,9 @@ const ContactSchema = new Schema<Contact>({
         ref: 'User',
         required: true,
     },
-    // receipt_id: {
-    //     type: Schema.Types.ObjectId,
-    //     ref: 'Receipt',
-    // }
 }, {
     timestamps: true,
     versionKey: false,
 })
 
-export const ContactModel = model<Contact>(DOCUMENT_NAME, ContactSchema, COLLECTION_NAME);
+export const ContactModel = model<Contract>(DOCUMENT_NAME, ContactSchema, COLLECTION_NAME);

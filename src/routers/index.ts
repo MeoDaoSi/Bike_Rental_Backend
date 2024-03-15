@@ -1,7 +1,6 @@
 import express from 'express';
 import auth from './auth';
-import branch from './branch';
-
+import branch from './Branch';
 
 const router = express.Router();
 

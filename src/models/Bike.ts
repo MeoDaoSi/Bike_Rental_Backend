@@ -9,15 +9,22 @@ export enum BikeType {
     MOTORCYCLE = 'MOTORCYCLE',
 }
 
+interface Bike_Status {
+    start_date?: Date,
+    end_date?: Date,
+    status: BikeType
+}
+
 export default interface Bike {
     _id: Types.ObjectId,
     branch: Branch,
     brand: string,
     model: string,
+    imgUrl?: string,
     year: number,
     color: string,
     license_plate?: string,
-    status: boolean,
+    status: Bike_Status,
     type: string,
     QR_code: string,
 }
@@ -25,6 +32,7 @@ export default interface Bike {
 const BikeSchema = new Schema<Bike>({
     branch: {
         type: Schema.Types.ObjectId,
+        ref: 'Branch',
         required: true,
     },
     brand: {
@@ -34,6 +42,12 @@ const BikeSchema = new Schema<Bike>({
     model: {
         type: Schema.Types.String,
         required: true,
+    },
+    imgUrl: {
+        type: Schema.Types.String,
+        required: false,
+        maxlength: 500,
+        trim: true,
     },
     year: {
         type: Schema.Types.Number,
@@ -47,8 +61,7 @@ const BikeSchema = new Schema<Bike>({
         type: Schema.Types.String,
     },
     status: {
-        type: Schema.Types.Boolean,
-        default: true,
+        type: Object,
         required: true,
     },
     type: {

@@ -9,12 +9,12 @@ router.get(
 )
 
 router.get(
-    '/:branch_id',
+    '/:branch_id/',
     getAll
 )
 
 router.post(
-    '/:branch_id',
+    '/:branch_id/',
     create
 )
 

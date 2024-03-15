@@ -32,21 +32,30 @@ export const getOne = asyncHandler(async (req: Request, res: Response) => {
 
 export const getAll = asyncHandler(async (req: Request, res: Response) => {
     console.log(req.query);
-    console.log(req.params);
-    let match: { status?: boolean } = {};
-    if (req.query.status) {
-        match.status = req.query.status === 'AVAILABLE' ? true : false;
+
+    let query = {};
+    if (req.params) {
+        query = { ...query, branch: req.params.branch_id }
     }
-    console.log(match);
+    if (req.query.status) {
+        query = {
+            ...query, status: {
+                status: req.query.status
+            }
+        }
+    }
+    console.log(query);
+    
+    if (req.query.type) {
+        query = { ...query, type: req.query.type }
+    }
 
-
-    const bikes = await BikeModel.find({ branch: req.params.branch_id })
+    const bikes = await BikeModel.find(query)
         .populate({
             path: 'branch',
             select: 'address',
-
         })
-        .sort({ createdAt: -1 })
+        .sort()
         .lean()
         .exec();
     console.log(bikes);
