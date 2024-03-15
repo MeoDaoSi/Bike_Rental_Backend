@@ -19,8 +19,14 @@ export const create = asyncHandler(async (req: Request, res: Response) => {
 })
 
 export const getOne = asyncHandler(async (req: Request, res: Response) => {
-    const bike_id = req.params.id;
-    const bike = await BikeModel.findById(bike_id);
+    console.log(req.params.bike_id);
+
+    const bike = await BikeModel.findById(req.params.bike_id)
+        .populate('branch')
+        .lean()
+        .exec();
+    console.log(bike?.branch.address);
+
     return res.status(200).json(bike);
 })
 

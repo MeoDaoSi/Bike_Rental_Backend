@@ -1,4 +1,5 @@
 import { Schema, Types, model } from 'mongoose';
+import Branch from './Branch';
 
 export const DOCUMENT_NAME = 'Bike';
 export const COLLECTION_NAME = 'bikes';
@@ -10,7 +11,7 @@ export enum BikeType {
 
 export default interface Bike {
     _id: Types.ObjectId,
-    branch: Types.ObjectId,
+    branch: Branch,
     brand: string,
     model: string,
     year: number,
