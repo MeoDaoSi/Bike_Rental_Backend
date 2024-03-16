@@ -9,10 +9,24 @@ export enum BikeType {
     MOTORCYCLE = 'MOTORCYCLE',
 }
 
-interface Bike_Status {
-    start_date?: Date,
-    end_date?: Date,
-    status: BikeType
+export enum BikeColor {
+    RED = 'RED',
+    BLUE = 'BLUE',
+    GREEN = 'GREEN',
+    YELLOW = 'YELLOW',
+    BLACK = 'BLACK',
+    WHITE = 'WHITE',
+    ORANGE = 'ORANGE',
+    PURPLE = 'PURPLE',
+    PINK = 'PINK',
+    BROWN = 'BROWN',
+    GREY = 'GREY',
+    SILVER = 'SILVER',
+}
+
+export enum BikeStatus {
+    AVAILABLE = 'AVAILABLE',
+    UNAVAILABLE = 'UNAVAILABLE',
 }
 
 export default interface Bike {
@@ -24,7 +38,7 @@ export default interface Bike {
     year: number,
     color: string,
     license_plate?: string,
-    status: Bike_Status,
+    status: string,
     type: string,
     QR_code: string,
 }
@@ -34,14 +48,19 @@ const BikeSchema = new Schema<Bike>({
         type: Schema.Types.ObjectId,
         ref: 'Branch',
         required: true,
+        trim: true,
     },
     brand: {
         type: Schema.Types.String,
         required: true,
+        maxlength: 200,
+        trim: true,
     },
     model: {
         type: Schema.Types.String,
         required: true,
+        maxlength: 200,
+        trim: true,
     },
     imgUrl: {
         type: Schema.Types.String,
@@ -52,21 +71,32 @@ const BikeSchema = new Schema<Bike>({
     year: {
         type: Schema.Types.Number,
         required: true,
+        trim: true,
+        max: new Date().getFullYear(),
     },
     color: {
         type: Schema.Types.String,
+        enum: Object.values(BikeColor),
         required: true,
     },
     license_plate: {
         type: Schema.Types.String,
+        maxlength: 20,
+        trim: true,
+        require: false,
     },
     status: {
-        type: Object,
+        type: Schema.Types.String,
+        enum: Object.values(BikeStatus),
+        trim: true,
+        default: BikeStatus.AVAILABLE,
         required: true,
     },
     type: {
         type: Schema.Types.String,
         enum: Object.values(BikeType),
+        required: true,
+        trim: true,
     },
     QR_code: {
         type: Schema.Types.String,

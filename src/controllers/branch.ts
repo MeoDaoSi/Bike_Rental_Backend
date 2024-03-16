@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import { BranchModel } from '../models/Branch';
 import asyncHandler from '../helpers/asyncHandler'
 
-export const createOne = asyncHandler(async (req: Request, res: Response) => {
+export const create = asyncHandler(async (req: Request, res: Response) => {
     const location = new BranchModel({
         address: req.body.address,
     });
@@ -27,7 +27,7 @@ export const getAll = asyncHandler(async (req: Request, res: Response) => {
     return res.status(200).json(locations).end();
 })
 
-export const updateOne = async (req: Request, res: Response) => {
+export const update = async (req: Request, res: Response) => {
 
     const location = await BranchModel.findById(req.params.location_id);
     if (!location) {
@@ -39,7 +39,7 @@ export const updateOne = async (req: Request, res: Response) => {
     return res.status(200).json();
 }
 
-export const removeOne = async (req: Request, res: Response) => {
+export const remove = async (req: Request, res: Response) => {
     const location_id = req.params.id;
     try {
         const bike = await BranchModel.findByIdAndDelete(location_id);

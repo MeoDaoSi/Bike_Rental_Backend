@@ -2,52 +2,56 @@ import { Schema, Types, model } from 'mongoose';
 import Bike from './Bike';
 import User from './User';
 import { BikeType } from './Bike';
+import Branch from './Branch';
 
-export const DOCUMENT_NAME = 'Contact';
-export const COLLECTION_NAME = 'contacts';
+export const DOCUMENT_NAME = 'Contract';
+export const COLLECTION_NAME = 'contracts';
 
-export enum ContactStatus { 
+export enum ContactStatus {
     PENDING = 'PENDING',
     ACCEPTED = 'ACCEPTED',
     REJECTED = 'REJECTED',
     COMPLETED = 'COMPLETED',
 }
 
-export default interface Contract { 
+export default interface Contract {
     _id: Types.ObjectId,
     start_date: Date,
     end_date: Date,
-    pickup: string,
-    return: string,
+    pickup: Branch,
+    return: Branch,
     note: string,
     status: string,
     total_price: number,
     duration: number,
     type: string
     bikes: Bike[],
-    user: User,
+    user?: User,
+    staff?: User,
 }
 
 const ContactSchema = new Schema<Contract>({
     start_date: {
         type: Date,
         required: true,
+        trim: true,
     },
     end_date: {
         type: Date,
         required: true,
+        trim: true,
     },
     pickup: {
-        type: String,
+        type: Schema.Types.ObjectId,
         required: true,
+        trim: true,
+        maxlength: 200
     },
     return: {
-        type: String,
+        type: Schema.Types.ObjectId,
         required: true,
-    },
-    note: {
-        type: String,
-        required: true,
+        trim: true,
+        maxlength: 200
     },
     status: {
         type: String,
@@ -65,7 +69,6 @@ const ContactSchema = new Schema<Contract>({
     },
     type: {
         type: String,
-        required: true,
         enum: Object.values(BikeType),
     },
     // select_package
@@ -81,11 +84,14 @@ const ContactSchema = new Schema<Contract>({
     user: {
         type: Schema.Types.ObjectId,
         ref: 'User',
-        required: true,
     },
+    staff: {
+        type: Schema.Types.ObjectId,
+        ref: 'User',
+    }
 }, {
     timestamps: true,
     versionKey: false,
 })
 
-export const ContactModel = model<Contract>(DOCUMENT_NAME, ContactSchema, COLLECTION_NAME);
+export const ContractModel = model<Contract>(DOCUMENT_NAME, ContactSchema, COLLECTION_NAME);

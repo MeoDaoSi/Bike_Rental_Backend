@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { BikeModel } from '../models/Bike';
+import { ContractModel } from '../models/Contract';
 import asyncHandler from '../helpers/asyncHandler';
 
 export const create = asyncHandler(async (req: Request, res: Response) => {
@@ -21,16 +22,44 @@ export const create = asyncHandler(async (req: Request, res: Response) => {
 export const getOne = asyncHandler(async (req: Request, res: Response) => {
     console.log(req.params.bike_id);
 
-    const bike = await BikeModel.findById(req.params.bike_id)
-        .populate('branch')
-        .lean()
-        .exec();
+    const bike = await BikeModel.findById(req.params.bike_id);
     console.log(bike?.branch.address);
 
     return res.status(200).json(bike);
 })
 
-export const getAll = asyncHandler(async (req: Request, res: Response) => {
+export const getAllBikeByUser = asyncHandler(async (req: Request, res: Response) => {
+
+    const start_date = new Date(req.query.start_date as string);
+    const end_date = new Date(req.query.end_date as string);
+
+    let bikes = await BikeModel.find({
+        status: "AVAILABLE",
+    })
+
+    const constract = await ContractModel.find({
+        status: "ACCEPTED",
+    })
+    if (!constract) {
+        return res.status(200).json(bikes);
+    }
+
+    const dupBike = constract.map((contract) => {
+        if (end_date < new Date(contract.start_date) || start_date > new Date(contract.end_date)) {
+            return
+        }
+        return contract.bikes;
+    });
+    const flatBike = dupBike.flat();
+
+    const bookedBikeIds = flatBike.map((bike) => bike?.toString());
+
+    const newBikes = bikes.filter(bike => !bookedBikeIds.includes(bike._id.toString()));
+
+    return res.status(200).json(newBikes);
+})
+
+export const getAllBikeByAdmin = asyncHandler(async (req: Request, res: Response) => {
     console.log(req.query);
 
     let query = {};
@@ -45,7 +74,7 @@ export const getAll = asyncHandler(async (req: Request, res: Response) => {
         }
     }
     console.log(query);
-    
+
     if (req.query.type) {
         query = { ...query, type: req.query.type }
     }
