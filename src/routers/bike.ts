@@ -1,20 +1,21 @@
 import express from 'express';
-import { getAllBikeByUser, create, getOne, update, remove } from '../controllers/bike';
+import { getAllMatch, getAll, create, getOne, update, remove } from '../controllers/bike';
 
 const router = express.Router();
+router.get(
+    '/:branch_id/book',
+    getAllMatch
+)
 
 router.get(
     '/:branch_id/:bike_id',
     getOne
 )
 
-router.get(
-    '/:branch_id/',
-    getAllBikeByUser
-)
 
 router.get(
-    '/:branch_id/book/',
+    '/:branch_id/',
+    getAll
 )
 
 router.post(

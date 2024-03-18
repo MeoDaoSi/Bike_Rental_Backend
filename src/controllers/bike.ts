@@ -7,12 +7,14 @@ export const create = asyncHandler(async (req: Request, res: Response) => {
     const bike = new BikeModel({
         brand: req.body.brand,
         model: req.body.model,
+        imgUrl: req.body.imgUrl,
         year: req.body.year,
         color: req.body.color,
         license_plate: req.body.license_plate,
+        price: req.body.price,
         status: req.body.status,
         type: req.body.type,
-        branch: req.body.branch,
+        branch: req.params.branch_id,
     });
     await bike.save();
     console.log(bike);
@@ -28,14 +30,28 @@ export const getOne = asyncHandler(async (req: Request, res: Response) => {
     return res.status(200).json(bike);
 })
 
-export const getAllBikeByUser = asyncHandler(async (req: Request, res: Response) => {
+export const getAllMatch = asyncHandler(async (req: Request, res: Response) => {
 
     const start_date = new Date(req.query.start_date as string);
     const end_date = new Date(req.query.end_date as string);
 
-    let bikes = await BikeModel.find({
+    let query: {
+        status: string,
+        branch: string
+    } = {
         status: "AVAILABLE",
-    })
+        branch: req.params.branch_id
+    }
+
+    console.log(query);
+
+
+    let bikes = await BikeModel.find(
+        query
+    )
+
+    console.log(bikes);
+
 
     const constract = await ContractModel.find({
         status: "ACCEPTED",
@@ -59,7 +75,7 @@ export const getAllBikeByUser = asyncHandler(async (req: Request, res: Response)
     return res.status(200).json(newBikes);
 })
 
-export const getAllBikeByAdmin = asyncHandler(async (req: Request, res: Response) => {
+export const getAll = asyncHandler(async (req: Request, res: Response) => {
     console.log(req.query);
 
     let query = {};
@@ -68,9 +84,7 @@ export const getAllBikeByAdmin = asyncHandler(async (req: Request, res: Response
     }
     if (req.query.status) {
         query = {
-            ...query, status: {
-                status: req.query.status
-            }
+            ...query, status: req.query.status
         }
     }
     console.log(query);
@@ -93,14 +107,19 @@ export const getAllBikeByAdmin = asyncHandler(async (req: Request, res: Response
 })
 
 export const update = asyncHandler(async (req: Request, res: Response) => {
-    const bike = await BikeModel.findById(req.params.id);
+    const bike = await BikeModel.findById(req.params.bike_id);
+    console.log(bike);
+
+
     if (!bike) throw new Error('Bike not found');
 
     if (req.body.brand) bike.brand = req.body.brand;
     if (req.body.model) bike.model = req.body.model;
+    if (req.body.imgUrl) bike.imgUrl = req.body.imgUrl;
     if (req.body.year) bike.year = req.body.year;
     if (req.body.color) bike.color = req.body.color;
     if (req.body.license_plate) bike.license_plate = req.body.license_plate;
+    if (req.body.price) bike.price = req.body.price;
     if (req.body.status) bike.status = req.body.status;
     if (req.body.type) bike.type = req.body.type;
     if (req.body.branch) bike.branch = req.body.branch;

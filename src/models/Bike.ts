@@ -38,6 +38,7 @@ export default interface Bike {
     year: number,
     color: string,
     license_plate?: string,
+    price: number,
     status: string,
     type: string,
     QR_code: string,
@@ -84,6 +85,11 @@ const BikeSchema = new Schema<Bike>({
         maxlength: 20,
         trim: true,
         require: false,
+    },
+    price: {
+        type: Schema.Types.Number,
+        required: true,
+        trim: true,
     },
     status: {
         type: Schema.Types.String,
