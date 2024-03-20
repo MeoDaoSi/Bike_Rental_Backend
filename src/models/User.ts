@@ -9,23 +9,15 @@ export enum USER_ROLE {
     SUPER_ADMIN = 'SUPER_ADMIN',
 }
 
-export enum gender {
-    MALE = "MALE",
-    FEMLAE = "FEMLAE",
-    UNKNOWN = "UNKNOWN"
-}
-
 export default interface User {
     _id: Types.ObjectId;
     full_name?: string;
     profilePicUrl?: string;
-    email: string;
-    password: string;
-    age?: number;
+    email?: string;
+    password?: string;
     birth_date?: Date;
-    phone?: number;
+    phone: number;
     address?: string;
-    gender?: string;
     role: string;
     verified?: boolean;
     status?: boolean;
@@ -47,26 +39,26 @@ const UserSchema = new Schema<User>({
         type: Schema.Types.String,
         unique: true,
         trim: true,
+        select: false,
+        sparse: true, // allow null values
     },
     password: {
         type: Schema.Types.String,
         select: false,
-    },
-    age: {
-        type: Schema.Types.Number,
     },
     birth_date: {
         type: Schema.Types.Date,
     },
     phone: {
         type: Schema.Types.Number,
+        unique: true,
+        trim: true,
+        required: true,
+        maxlength: 11,
     },
     address: {
         type: Schema.Types.String,
         trim: true,
-    },
-    gender: {
-        type: String, enum: Object.values(gender),
     },
     status: {
         type: Schema.Types.Boolean,
@@ -76,6 +68,20 @@ const UserSchema = new Schema<User>({
         type: String,
         enum: Object.values(USER_ROLE),
         default: 'USER'
+    },
+    verified: {
+        type: Schema.Types.Boolean,
+        default: false,
+    },
+    createdAt: {
+        type: Schema.Types.Date,
+        default: Date.now,
+        select: false,
+    },
+    updatedAt: {
+        type: Schema.Types.Date,
+        default: Date.now,
+        select: false,
     },
 }, {
     timestamps: true,
