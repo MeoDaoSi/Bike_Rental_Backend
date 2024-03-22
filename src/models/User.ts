@@ -16,7 +16,7 @@ export default interface User {
     email?: string;
     password?: string;
     birth_date?: Date;
-    phone: number;
+    phone_number: number;
     address?: string;
     role: string;
     verified?: boolean;
@@ -49,7 +49,7 @@ const UserSchema = new Schema<User>({
     birth_date: {
         type: Schema.Types.Date,
     },
-    phone: {
+    phone_number: {
         type: Schema.Types.Number,
         unique: true,
         trim: true,

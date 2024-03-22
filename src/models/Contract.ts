@@ -10,6 +10,7 @@ export const COLLECTION_NAME = 'contracts';
 export enum ContactStatus {
     PENDING = 'PENDING',
     ACCEPTED = 'ACCEPTED',
+    PROCESSING = 'PROCESSING',
     REJECTED = 'REJECTED',
     COMPLETED = 'COMPLETED',
 }
@@ -18,9 +19,8 @@ export default interface Contract {
     _id: Types.ObjectId,
     start_date: Date,
     end_date: Date,
-    pickup: Branch,
-    return: Branch,
-    note: string,
+    pickup_address: Branch,
+    return_address: Branch,
     status: string,
     total_price: number,
     duration: number,
@@ -41,13 +41,13 @@ const ContactSchema = new Schema<Contract>({
         required: true,
         trim: true,
     },
-    pickup: {
+    pickup_address: {
         type: Schema.Types.ObjectId,
         required: true,
         trim: true,
         maxlength: 200
     },
-    return: {
+    return_address: {
         type: Schema.Types.ObjectId,
         required: true,
         trim: true,
