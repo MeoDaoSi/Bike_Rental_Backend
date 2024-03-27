@@ -2,7 +2,6 @@ import { Schema, Types, model } from 'mongoose';
 import Bike from './Bike';
 import User from './User';
 import { BikeType } from './Bike';
-import Branch from './Branch';
 
 export const DOCUMENT_NAME = 'Contract';
 export const COLLECTION_NAME = 'contracts';
@@ -19,8 +18,8 @@ export default interface Contract {
     _id: Types.ObjectId,
     start_date: Date,
     end_date: Date,
-    pickup_address: Branch,
-    return_address: Branch,
+    pickup_address: string,
+    return_address: string,
     status: string,
     total_price: number,
     duration: number,
@@ -42,13 +41,13 @@ const ContactSchema = new Schema<Contract>({
         trim: true,
     },
     pickup_address: {
-        type: Schema.Types.ObjectId,
+        type: Schema.Types.String,
         required: true,
         trim: true,
         maxlength: 200
     },
     return_address: {
-        type: Schema.Types.ObjectId,
+        type: Schema.Types.String,
         required: true,
         trim: true,
         maxlength: 200

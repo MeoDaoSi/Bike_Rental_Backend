@@ -14,11 +14,11 @@ export const create = asyncHandler(async (req: Request, res: Response) => {
                 phone_number: req.body.phone_number
             }
         },
-        { upsert: true, new: true }
+        { upsert: true }
     )
     console.log(user);
 
-    console.log(req.body.bikes);
+    console.log("test" + req.body.cart);
 
     const contact = new ContractModel({
         start_date: req.body.start_date,
@@ -27,7 +27,7 @@ export const create = asyncHandler(async (req: Request, res: Response) => {
         return_address: req.body.return_address,
         total_price: req.body.total_price,
         duration: req.body.duration,
-        bikes: req.body.bikes,
+        bikes: req.body.cart,
         user: user?._id,
         staff: req.body?.staff,
     });
