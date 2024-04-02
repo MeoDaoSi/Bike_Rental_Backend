@@ -52,7 +52,6 @@ const UserSchema = new Schema<User>({
     phone_number: {
         type: Schema.Types.Number,
         trim: true,
-        required: true,
         maxlength: 11,
     },
     address: {
