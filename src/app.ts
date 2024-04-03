@@ -22,6 +22,7 @@ db_connect();
 
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
     console.log(err.stack);
+    console.log(err.message);
     res.status(500).send('Something broke!');
 })
 

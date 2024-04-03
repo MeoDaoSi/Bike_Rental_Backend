@@ -5,8 +5,8 @@ import contract from './contract';
 
 const router = express.Router();
 
-router.use('/auth', auth);
 router.use('/contract', contract);
 router.use('/branch', branch);
+router.use('/auth', auth);
 
 export default router;

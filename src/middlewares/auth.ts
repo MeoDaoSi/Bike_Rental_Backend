@@ -4,7 +4,7 @@ import asyncHandler from "../helpers/asyncHandler";
 import { UserModel } from "../models/User";
 import User from "../models/User";
 
-interface AuthenticatedRequest extends Request {
+export interface AuthenticatedRequest extends Request {
     user?: User // Add the user property to the request
 }
 

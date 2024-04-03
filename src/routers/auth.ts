@@ -8,6 +8,6 @@ router.post('/register', register);
 
 router.use(auth);
 
-router.get('/', get);
+router.get('/me', get);
 
 export default router;
