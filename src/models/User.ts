@@ -39,12 +39,10 @@ const UserSchema = new Schema<User>({
         type: Schema.Types.String,
         unique: true,
         trim: true,
-        select: false,
         sparse: true, // allow null values
     },
     password: {
         type: Schema.Types.String,
-        select: false,
     },
     birth_date: {
         type: Schema.Types.Date,

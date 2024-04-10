@@ -11,7 +11,7 @@ export interface AuthenticatedRequest extends Request {
 export const auth = asyncHandler(async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
     const token = req.headers.authorization?.split(' ')[1];
     if (!token) throw new Error('Token not found');
-    console.log(token);
+    console.log('test' + token);
 
     const decoded: any = jwt.verify(token, process.env.JWT_SECRET_KEY!);
     if (!decoded) throw new Error('Invalid token');

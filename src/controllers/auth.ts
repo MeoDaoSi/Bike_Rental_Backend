@@ -17,9 +17,15 @@ export const register = asyncHandler(async (req: Request, res: Response) => {
 })
 
 export const login = asyncHandler(async (req: Request, res: Response) => {
+    console.log(req.body);
+
     const user = await UserModel.findOne({ email: req.body.email });
     if (!user) throw new Error('User not found');
+    console.log(user);
+
     const isValid = await Bcrypt.compare(req.body.password, user.password!);
+    console.log(isValid);
+
     if (!isValid) throw new Error('Invalid password');
     const token = await jwt.sign({ _id: user._id }, process.env.JWT_SECRET_KEY!);
     res.status(200).json({ user, token });
