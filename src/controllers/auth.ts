@@ -7,7 +7,7 @@ import { AuthenticatedRequest } from '../middlewares/auth';
 
 export const register = asyncHandler(async (req: Request, res: Response) => {
     const user = await UserModel.findOne({ email: req.body.email });
-    if (user) throw new Error('User already exists');
+    if (user) throw new Error('Email đã tồn tại !');
     const passwordHash = await Bcrypt.hash(req.body.password, 10);
     const newUser = await UserModel.create({ full_name: req.body.full_name, email: req.body.email, password: passwordHash });
     console.log(process.env.JWT_SECRET_KEY);

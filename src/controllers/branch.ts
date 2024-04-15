@@ -29,20 +29,21 @@ export const getAll = asyncHandler(async (req: Request, res: Response) => {
 
 export const update = async (req: Request, res: Response) => {
 
-    const location = await BranchModel.findById(req.params.location_id);
-    if (!location) {
-        return res.status(404).json({ message: 'Location not found' });
+    const branch = await BranchModel.findById(req.params.branch_id);
+    if (!branch) {
+        return res.status(404).json({ message: 'Không tìm thấy chi nhánh !' });
     }
-    location.address = req.body.address;
+    branch.address = req.body.address;
+    console.log(branch);
 
-    await BranchModel.updateOne({ _id: location._id }, { $set: { ...location } });
+    await BranchModel.updateOne({ _id: branch._id }, { $set: { ...branch } });
     return res.status(200).json();
 }
 
 export const remove = async (req: Request, res: Response) => {
-    const location_id = req.params.id;
+    const branch_id = req.params.id;
     try {
-        const bike = await BranchModel.findByIdAndDelete(location_id);
+        const bike = await BranchModel.findByIdAndDelete(branch_id);
         return res.status(200).json(bike).end();
     } catch (error) {
         return res.status(400).json({ message: error }).end();

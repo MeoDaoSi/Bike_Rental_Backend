@@ -4,22 +4,18 @@ import asyncHandler from '../helpers/asyncHandler';
 import { UserModel } from '../models/User';
 
 export const create = asyncHandler(async (req: Request, res: Response) => {
-    // console.log(req.body.bikes);
-    const user = await UserModel.findOneAndUpdate(
-        { phone_number: req.body.phone_number },
-        {
-            $set: {
-                full_name: req.body.full_name,
-                email: req.body.email,
-                phone_number: req.body.phone_number
-            }
-        },
-        { upsert: true }
-    )
-    console.log(user);
-
+    let newUser = new UserModel();
+    const user = await UserModel.findOne({
+        email: req.body.email,
+    })
+    if (!user) {
+        newUser = new UserModel({
+            phone_number: req.body.phone_number,
+            email: req.body.email,
+        });
+        await newUser.save();
+    }
     console.log("test" + req.body.cart);
-
     const contact = new ContractModel({
         start_date: req.body.start_date,
         end_date: req.body.end_date,
@@ -28,7 +24,7 @@ export const create = asyncHandler(async (req: Request, res: Response) => {
         total_price: req.body.total_price,
         duration: req.body.duration,
         bikes: req.body.cart,
-        user: user?._id,
+        user: user?._id || newUser._id,
         staff: req.body?.staff,
     });
     await contact.save();
@@ -41,6 +37,8 @@ export const getOne = asyncHandler(async (req: Request, res: Response) => {
 
 export const getAll = asyncHandler(async (req: Request, res: Response) => {
     const contacts = await ContractModel.find()
+        .populate('user')
+        .populate('bikes')
         .lean()
         .exec();
     return res.status(200).json(contacts);
