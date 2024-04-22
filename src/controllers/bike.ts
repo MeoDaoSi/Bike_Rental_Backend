@@ -54,7 +54,7 @@ export const getAllMatch = asyncHandler(async (req: Request, res: Response) => {
 
 
     const constract = await ContractModel.find({
-        status: "ACCEPTED",
+        status: "APPROVED",
     })
     if (!constract) {
         return res.status(200).json(bikes);
@@ -127,6 +127,7 @@ export const update = asyncHandler(async (req: Request, res: Response) => {
     await BikeModel.updateOne({ _id: bike._id }, { $set: { ...bike } })
         .lean()
         .exec()
+
     return res.status(200).json();
 })
 

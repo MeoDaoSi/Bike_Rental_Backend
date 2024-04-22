@@ -8,7 +8,7 @@ export const COLLECTION_NAME = 'contracts';
 
 export enum ContactStatus {
     PENDING = 'PENDING',
-    ACCEPTED = 'ACCEPTED',
+    APPROVED = 'APPROVED',
     PROCESSING = 'PROCESSING',
     REJECTED = 'REJECTED',
     COMPLETED = 'COMPLETED',
