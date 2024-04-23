@@ -7,9 +7,29 @@ import { AuthenticatedRequest } from '../middlewares/auth';
 
 export const register = asyncHandler(async (req: Request, res: Response) => {
     const user = await UserModel.findOne({ email: req.body.email });
-    if (user) throw new Error('Email đã tồn tại !');
+    console.log(req.body.phone_number);
+
+    if (user) {
+        if (user.verified) {
+            throw new Error('User already exists');
+        }
+        user.password = await Bcrypt.hash(req.body.password, 10);
+        user.verified = true;
+        await UserModel.updateOne({ _id: user._id }, { $set: { ...user } })
+            .lean()
+            .exec()
+
+        res.status(200).json().end();
+    }
     const passwordHash = await Bcrypt.hash(req.body.password, 10);
-    const newUser = await UserModel.create({ full_name: req.body.full_name, email: req.body.email, password: passwordHash });
+    const newUser = await UserModel.create({
+        full_name: req.body.full_name,
+        email: req.body.email,
+        password: passwordHash,
+        phone_number: `0${req.body.phone_number}`,
+        address: req.body.address,
+        verified: true
+    });
     console.log(process.env.JWT_SECRET_KEY);
 
     const token = await jwt.sign({ _id: newUser._id }, process.env.JWT_SECRET_KEY!);

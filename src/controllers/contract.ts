@@ -12,8 +12,10 @@ export const create = asyncHandler(async (req: Request, res: Response) => {
     if (!user) {
         newUser = new UserModel({
             phone_number: req.body.phone_number,
+            email: req.body.email,
             full_name: req.body.full_name,
             birth_date: req.body.birth_date,
+            address: req.body.address,
         });
         await newUser.save();
     }
@@ -58,11 +60,10 @@ export const update = asyncHandler(async (req: Request, res: Response) => {
     }
     if (req.body.status) contract.status = req.body.status;
     if (req.body.status == 'PROCESSING') {
-        const bike = await BikeModel.findByIdAndUpdate(contract.bikes[0]._id, {
-            status: 'UNAVAILABLE',
-        });
-        console.log(bike);
-
+        await BikeModel.updateMany(
+            { _id: { $in: contract.bikes }, status: 'AVAILABLE' },
+            { $set: { status: 'UNAVAILABLE' } }
+        );
     }
     await ContractModel.updateOne({ $set: contract })
         .lean()
