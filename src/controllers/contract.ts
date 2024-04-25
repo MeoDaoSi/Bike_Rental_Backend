@@ -72,6 +72,16 @@ export const update = asyncHandler(async (req: Request, res: Response) => {
     return res.status(200).json();
 })
 
+export const findContractByUserId = asyncHandler(async (req: Request, res: Response) => {
+    const contracts = await ContractModel.find({
+        user: req.params.user_id,
+    })
+        .populate('bikes')
+        .lean()
+        .exec();
+    return res.status(200).json(contracts);
+})
+
 export const remove = asyncHandler(async (req: Request, res: Response) => {
 
 })
