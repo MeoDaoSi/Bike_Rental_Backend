@@ -27,6 +27,7 @@ export default interface Contract {
     bikes: Bike[],
     user?: User,
     staff?: User,
+    payment: boolean,
 }
 
 const ContactSchema = new Schema<Contract>({
@@ -87,6 +88,10 @@ const ContactSchema = new Schema<Contract>({
     staff: {
         type: Schema.Types.ObjectId,
         ref: 'User',
+    },
+    payment: {
+        type: Boolean,
+        default: false,
     }
 }, {
     timestamps: true,

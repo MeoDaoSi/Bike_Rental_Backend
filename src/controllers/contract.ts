@@ -19,7 +19,6 @@ export const create = asyncHandler(async (req: Request, res: Response) => {
         });
         await newUser.save();
     }
-    console.log("test" + req.body.cart);
     const contact = new ContractModel({
         start_date: req.body.start_date,
         end_date: req.body.end_date,
@@ -64,6 +63,7 @@ export const update = asyncHandler(async (req: Request, res: Response) => {
             { _id: { $in: contract.bikes }, status: 'AVAILABLE' },
             { $set: { status: 'UNAVAILABLE' } }
         );
+        contract.payment = true;
     }
     await ContractModel.updateOne({ $set: contract })
         .lean()
