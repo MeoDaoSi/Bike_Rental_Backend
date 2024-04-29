@@ -57,7 +57,6 @@ export const update = asyncHandler(async (req: Request, res: Response) => {
     if (!contract) {
         return res.status(404).json({ message: 'Contract not found' });
     }
-    if (req.body.status) contract.status = req.body.status;
     if (req.body.status == 'PROCESSING') {
         await BikeModel.updateMany(
             { _id: { $in: contract.bikes }, status: 'AVAILABLE' },
@@ -65,9 +64,16 @@ export const update = asyncHandler(async (req: Request, res: Response) => {
         );
         contract.payment = true;
     }
-    await ContractModel.updateOne({ $set: contract })
-        .lean()
-        .exec();
+    if (req.body.status == 'COMPLETED') {
+        await BikeModel.updateMany(
+            { _id: { $in: contract.bikes }, status: 'UNAVAILABLE' },
+            { $set: { status: 'AVAILABLE' } }
+        );
+        contract.payment = true;
+    }
+    await ContractModel.updateOne({ _id: contract._id }, {
+        status: req.body.status
+    })
 
     return res.status(200).json();
 })
