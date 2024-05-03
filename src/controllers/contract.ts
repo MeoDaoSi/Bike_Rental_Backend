@@ -44,12 +44,31 @@ export const getOne = asyncHandler(async (req: Request, res: Response) => {
 })
 
 export const getAll = asyncHandler(async (req: Request, res: Response) => {
-    const contacts = await ContractModel.find()
+    const contracts = await ContractModel.find()
         .populate('user')
         .populate('bikes')
         .lean()
         .exec();
-    return res.status(200).json(contacts);
+    return res.status(200).json(contracts);
+})
+
+export const getRevenue = asyncHandler(async (req: Request, res: Response) => {
+    const contracts = await ContractModel.aggregate([
+        {
+            $match: {
+                status: 'COMPLETED',
+            },
+        },
+        {
+            $group: {
+                _id: null,
+                total: { $sum: '$total_price' },
+            },
+        },
+    ]);
+    console.log(contracts);
+
+    res.status(200).json(contracts);
 })
 
 export const update = asyncHandler(async (req: Request, res: Response) => {
@@ -69,7 +88,6 @@ export const update = asyncHandler(async (req: Request, res: Response) => {
             { _id: { $in: contract.bikes }, status: 'UNAVAILABLE' },
             { $set: { status: 'AVAILABLE' } }
         );
-        contract.payment = true;
     }
     await ContractModel.updateOne({ _id: contract._id }, {
         status: req.body.status
