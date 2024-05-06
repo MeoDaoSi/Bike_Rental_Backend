@@ -1,4 +1,4 @@
 [[redirects]]
 from = "/*"
-to = "/bike-rental/index.html"
+to = "/app.ts"
 status = 200
