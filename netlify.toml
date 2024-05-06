@@ -1,0 +1,4 @@
+[[redirects]]
+from = "/*"
+to = "/bike-rental/index.html"
+status = 200
