@@ -47,7 +47,9 @@ export const login = asyncHandler(async (req: Request, res: Response) => {
     console.log(isValid);
 
     if (!isValid) throw new Error('Invalid password');
-    const token = await jwt.sign({ _id: user._id }, process.env.JWT_SECRET_KEY!);
+    const token = await jwt.sign({ _id: user._id }, process.env.JWT_SECRET_KEY!, {
+        expiresIn: `${process.env.ACCESS_TOKEN_VALIDITY_SEC}d`,
+    });
     res.status(200).json({ user, token });
 })
 

@@ -14,6 +14,8 @@ export const auth = asyncHandler(async (req: AuthenticatedRequest, res: Response
 
     const decoded: any = jwt.verify(token, process.env.JWT_SECRET_KEY!);
     if (!decoded) throw new Error('Invalid token');
+    console.log(decoded);
+
     const user = await UserModel.findById(decoded._id);
     if (!user) throw new Error('User not found');
     req.user = user;

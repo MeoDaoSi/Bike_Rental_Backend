@@ -43,7 +43,6 @@ const UserSchema = new Schema<User>({
     },
     password: {
         type: Schema.Types.String,
-        select: false,
         trim: true,
     },
     birth_date: {
