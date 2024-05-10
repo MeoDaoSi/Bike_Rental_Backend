@@ -1,8 +1,9 @@
 import express from 'express'
-import { getAll } from '../controllers/user'
+import { getAll, update } from '../controllers/user'
 
 const router = express.Router()
 
 router.get('/', getAll)
+router.put('/:user_id', update)
 
 export default router
