@@ -44,7 +44,15 @@ export const getOne = asyncHandler(async (req: Request, res: Response) => {
 })
 
 export const getAll = asyncHandler(async (req: Request, res: Response) => {
-    const contracts = await ContractModel.find()
+    console.log(req.query);
+
+    let query = {};
+    if (req.query.status) {
+        query = {
+            ...query, status: req.query.status
+        }
+    }
+    const contracts = await ContractModel.find(query)
         .populate('user')
         .populate('bikes')
         .lean()

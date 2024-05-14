@@ -87,7 +87,6 @@ export const getAll = asyncHandler(async (req: Request, res: Response) => {
             ...query, status: req.query.status
         }
     }
-    console.log(query);
 
     if (req.query.type) {
         query = { ...query, type: req.query.type }
