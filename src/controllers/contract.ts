@@ -74,10 +74,11 @@ export const getRevenue = asyncHandler(async (req: Request, res: Response) => {
         },
         {
             $group: {
-                _id: null,
+                _id: { $month: '$createdAt' },
                 total: { $sum: '$total_price' },
             },
         },
+        { $sort: { _id: 1 } },
     ]);
     console.log(contracts);
 

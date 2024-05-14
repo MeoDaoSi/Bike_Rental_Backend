@@ -35,25 +35,29 @@ export const getAllMatch = asyncHandler(async (req: Request, res: Response) => {
     const start_date = new Date(req.query.start_date as string);
     const end_date = new Date(req.query.end_date as string);
 
+    let sort = {};
+
+    if (req.query.price) {
+        if (req.query.price == "1") {
+            sort = { price: 1 }
+        } else {
+            sort = { price: -1 }
+        }
+    }
+
     let query: {
         status: string,
-        branch: string
-        type: string
+        branch: string,
+        type: string,
     } = {
         status: "AVAILABLE",
         branch: req.params.branch_id,
-        type: req.query.type as string
+        type: req.query.type as string,
     }
-
-    console.log(query);
-
 
     let bikes = await BikeModel.find(
         query
-    )
-
-    console.log(bikes);
-
+    ).sort(sort).lean().exec();
 
     const constract = await ContractModel.find({
         status: "APPROVED",
@@ -62,12 +66,17 @@ export const getAllMatch = asyncHandler(async (req: Request, res: Response) => {
         return res.status(200).json(bikes);
     }
 
+
     const dupBike = constract.map((contract) => {
+        console.log(start_date > new Date(contract.end_date));
+
+
         if (end_date < new Date(contract.start_date) || start_date > new Date(contract.end_date)) {
             return
         }
         return contract.bikes;
     });
+
     const flatBike = dupBike.flat();
 
     const bookedBikeIds = flatBike.map((bike) => bike?.toString());
@@ -100,6 +109,16 @@ export const getAll = asyncHandler(async (req: Request, res: Response) => {
             select: 'address',
         })
         .sort()
+        .lean()
+        .exec();
+    console.log(bikes);
+
+    return res.status(200).json(bikes);
+})
+
+export const getAllBike = asyncHandler(async (req: Request, res: Response) => {
+
+    const bikes = await BikeModel.find()
         .lean()
         .exec();
     console.log(bikes);

@@ -1,10 +1,15 @@
 import express from 'express';
-import { getAllMatch, getAll, create, getOne, update, remove } from '../controllers/bike';
+import { getAllMatch, getAll, create, getOne, update, remove, getAllBike } from '../controllers/bike';
 
 const router = express.Router();
 router.get(
     '/:branch_id/book',
     getAllMatch
+)
+
+router.get(
+    '/',
+    getAllBike
 )
 
 router.get(
