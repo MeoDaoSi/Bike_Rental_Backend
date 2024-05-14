@@ -38,9 +38,11 @@ export const getAllMatch = asyncHandler(async (req: Request, res: Response) => {
     let query: {
         status: string,
         branch: string
+        type: string
     } = {
         status: "AVAILABLE",
-        branch: req.params.branch_id
+        branch: req.params.branch_id,
+        type: req.query.type as string
     }
 
     console.log(query);

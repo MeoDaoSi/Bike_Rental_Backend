@@ -4,6 +4,8 @@ import asyncHandler from '../helpers/asyncHandler';
 import { UserModel } from '../models/User';
 import { BikeModel } from '../models/Bike';
 
+let perPage = 8;
+
 export const create = asyncHandler(async (req: Request, res: Response) => {
     let newUser = new UserModel();
     const user = await UserModel.findOne({
@@ -44,7 +46,7 @@ export const getOne = asyncHandler(async (req: Request, res: Response) => {
 })
 
 export const getAll = asyncHandler(async (req: Request, res: Response) => {
-    console.log(req.query);
+    const page: number = Number(req.query.page) || 1;
 
     let query = {};
     if (req.query.status) {
@@ -55,6 +57,9 @@ export const getAll = asyncHandler(async (req: Request, res: Response) => {
     const contracts = await ContractModel.find(query)
         .populate('user')
         .populate('bikes')
+        .limit(perPage)
+        .skip((perPage * page) - perPage)
+        .sort({ createdAt: -1 })
         .lean()
         .exec();
     return res.status(200).json(contracts);
